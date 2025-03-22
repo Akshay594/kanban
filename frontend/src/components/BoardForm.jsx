@@ -1,27 +1,33 @@
 // ./frontend/src/components/BoardForm.jsx
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import '../styles/Form.css';
 
-const BoardForm = ({ onSubmit, initialValues = { name: '' } }) => {
-  const [formData, setFormData] = useState(initialValues);
+const BoardForm = ({ onSubmit, initialValues = { name: '' }, existingBoards = [] }) => {
+  // Use a single state variable for name instead of a formData object
+  const [name, setName] = useState(initialValues.name || '');
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  // Reset form when initialValues change
-  useEffect(() => {
-    setFormData(initialValues);
-  }, [initialValues]);
 
   const validateForm = () => {
     const newErrors = {};
     
-    if (!formData.name.trim()) {
+    if (!name.trim()) {
       newErrors.name = 'Board name is required';
-    } else if (formData.name.trim().length < 3) {
+    } else if (name.trim().length < 3) {
       newErrors.name = 'Board name must be at least 3 characters';
-    } else if (formData.name.trim().length > 50) {
+    } else if (name.trim().length > 50) {
       newErrors.name = 'Board name must be less than 50 characters';
+    }
+    
+    // Check for duplicate board names
+    const isDuplicate = existingBoards.some(
+      board => board.name.toLowerCase() === name.trim().toLowerCase() && 
+              board.id !== initialValues.id // Skip current board when editing
+    );
+    
+    if (isDuplicate) {
+      newErrors.name = 'A board with this name already exists';
     }
     
     setErrors(newErrors);
@@ -29,12 +35,11 @@ const BoardForm = ({ onSubmit, initialValues = { name: '' } }) => {
   };
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setName(e.target.value);
     
     // Clear error when user starts typing
-    if (errors[name]) {
-      setErrors(prev => ({ ...prev, [name]: null }));
+    if (errors.name) {
+      setErrors({});
     }
   };
 
@@ -44,9 +49,14 @@ const BoardForm = ({ onSubmit, initialValues = { name: '' } }) => {
     if (validateForm()) {
       setIsSubmitting(true);
       try {
-        await onSubmit(formData);
+        await onSubmit({ name });
       } catch (err) {
         console.error('Form submission error:', err);
+        
+        // Handle API error response if needed
+        if (err.response && err.response.data && err.response.data.message) {
+          setErrors({ name: err.response.data.message });
+        }
       } finally {
         setIsSubmitting(false);
       }
@@ -61,7 +71,7 @@ const BoardForm = ({ onSubmit, initialValues = { name: '' } }) => {
           type="text"
           id="name"
           name="name"
-          value={formData.name}
+          value={name}
           onChange={handleChange}
           placeholder="e.g. Marketing Plan"
           className={errors.name ? 'error' : ''}
