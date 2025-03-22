@@ -1,3 +1,5 @@
+// ./frontend/src/context/KanbanContext.jsx
+
 import { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { boardsApi, columnsApi, tasksApi } from '../services/api';
 
@@ -122,6 +124,7 @@ export const KanbanProvider = ({ children }) => {
     try {
       setLoading(true);
       const response = await columnsApi.update(id, { name });
+      
       if (currentBoard) {
         setCurrentBoard(prev => ({
           ...prev,
