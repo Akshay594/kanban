@@ -12,10 +12,12 @@ const app = express();
 const prisma = new PrismaClient();
 
 
-// Middleware
 app.use(cors({
-  origin: process.env.CORS_ORIGIN || 'http://localhost:3000'
+  origin: ['https://kanban-nj1wlg4nz-gopal-s-projects-eac2c47f.vercel.app', 'http://localhost:3000'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  credentials: true
 }));
+
 
 app.use(helmet());
 app.use(morgan(process.env.NODE_ENV === 'production' ? 'combined' : 'dev'));
