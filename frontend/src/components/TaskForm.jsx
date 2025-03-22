@@ -1,6 +1,6 @@
 // ./frontend/src/components/TaskForm.jsx
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import '../styles/Form.css';
 
 const TaskForm = ({ 
@@ -9,55 +9,35 @@ const TaskForm = ({
   initialValues = { title: '', description: '', columnId: '' },
   isEdit = false 
 }) => {
-  const [formData, setFormData] = useState({
-    ...initialValues,
-    columnId: initialValues.columnId || (columns.length > 0 ? columns[0].id : '')
-  });
+  // Use separate state variables instead of a single formData object
+  const [title, setTitle] = useState(initialValues.title || '');
+  const [description, setDescription] = useState(initialValues.description || '');
+  const [columnId, setColumnId] = useState(
+    initialValues.columnId || (columns.length > 0 ? columns[0].id : '')
+  );
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [charCount, setCharCount] = useState(initialValues.description?.length || 0);
 
-  // Reset form when initialValues change
-  useEffect(() => {
-    setFormData({
-      ...initialValues,
-      columnId: initialValues.columnId || (columns.length > 0 ? columns[0].id : '')
-    });
-    setCharCount(initialValues.description?.length || 0);
-  }, [initialValues, columns]);
-
+  // Calculate character count directly from current value
+  const charCount = description ? description.length : 0;
+  
   const validateForm = () => {
     const newErrors = {};
     
-    if (!formData.title.trim()) {
+    if (!title.trim()) {
       newErrors.title = 'Task title is required';
-    } else if (formData.title.trim().length < 3) {
+    } else if (title.trim().length < 3) {
       newErrors.title = 'Task title must be at least 3 characters';
-    } else if (formData.title.trim().length > 100) {
+    } else if (title.trim().length > 100) {
       newErrors.title = 'Task title must be less than 100 characters';
     }
     
-    if (!formData.columnId) {
+    if (!columnId) {
       newErrors.columnId = 'Please select a column';
     }
     
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  };
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-    
-    // Update character count for description
-    if (name === 'description') {
-      setCharCount(value.length);
-    }
-    
-    // Clear error when user starts typing
-    if (errors[name]) {
-      setErrors(prev => ({ ...prev, [name]: null }));
-    }
   };
 
   const handleSubmit = async (e) => {
@@ -66,7 +46,7 @@ const TaskForm = ({
     if (validateForm()) {
       setIsSubmitting(true);
       try {
-        await onSubmit(formData);
+        await onSubmit({ title, description, columnId });
       } catch (err) {
         console.error('Form submission error:', err);
       } finally {
@@ -86,8 +66,11 @@ const TaskForm = ({
           type="text"
           id="title"
           name="title"
-          value={formData.title}
-          onChange={handleChange}
+          value={title}
+          onChange={(e) => {
+            setTitle(e.target.value);
+            if (errors.title) setErrors({...errors, title: null});
+          }}
           placeholder="e.g. Add authentication endpoints"
           className={errors.title ? 'error' : ''}
           disabled={isSubmitting}
@@ -104,8 +87,8 @@ const TaskForm = ({
         <textarea
           id="description"
           name="description"
-          value={formData.description || ''}
-          onChange={handleChange}
+          value={description || ''}
+          onChange={(e) => setDescription(e.target.value)}
           rows="4"
           placeholder="e.g. Create login and signup endpoints with JWT authentication"
           disabled={isSubmitting}
@@ -122,8 +105,11 @@ const TaskForm = ({
           <select
             id="columnId"
             name="columnId"
-            value={formData.columnId}
-            onChange={handleChange}
+            value={columnId}
+            onChange={(e) => {
+              setColumnId(e.target.value);
+              if (errors.columnId) setErrors({...errors, columnId: null});
+            }}
             className={errors.columnId ? 'error' : ''}
             disabled={isSubmitting}
           >

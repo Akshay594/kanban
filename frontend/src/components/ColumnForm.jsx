@@ -1,17 +1,17 @@
 // ./frontend/src/components/ColumnForm.jsx
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import '../styles/Form.css';
 
-const ColumnForm = ({ onSubmit, initialValues = { name: '' } }) => {
-  const [formData, setFormData] = useState(initialValues);
+const ColumnForm = ({ 
+  onSubmit, 
+  initialValues = { name: '' }, 
+  existingColumns = []
+}) => {
+  // Use a single state variable for the name instead of a formData object
+  const [name, setName] = useState(initialValues.name || '');
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  // Reset form when initialValues change
-  useEffect(() => {
-    setFormData(initialValues);
-  }, [initialValues]);
 
   // Suggested column names
   const suggestions = ['To Do', 'In Progress', 'Done', 'Backlog', 'Review', 'Testing', 'Deployed'];
@@ -19,26 +19,26 @@ const ColumnForm = ({ onSubmit, initialValues = { name: '' } }) => {
   const validateForm = () => {
     const newErrors = {};
     
-    if (!formData.name.trim()) {
+    if (!name.trim()) {
       newErrors.name = 'Column name is required';
-    } else if (formData.name.trim().length < 2) {
+    } else if (name.trim().length < 2) {
       newErrors.name = 'Column name must be at least 2 characters';
-    } else if (formData.name.trim().length > 30) {
+    } else if (name.trim().length > 30) {
       newErrors.name = 'Column name must be less than 30 characters';
+    }
+    
+    // Check for duplicate column names
+    const isDuplicate = existingColumns.some(
+      column => column.name.toLowerCase() === name.trim().toLowerCase() && 
+                column.id !== initialValues.id // Skip current column when editing
+    );
+    
+    if (isDuplicate) {
+      newErrors.name = 'A column with this name already exists';
     }
     
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  };
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-    
-    // Clear error when user starts typing
-    if (errors[name]) {
-      setErrors(prev => ({ ...prev, [name]: null }));
-    }
   };
 
   const handleSubmit = async (e) => {
@@ -47,9 +47,18 @@ const ColumnForm = ({ onSubmit, initialValues = { name: '' } }) => {
     if (validateForm()) {
       setIsSubmitting(true);
       try {
-        await onSubmit(formData);
+        await onSubmit({ name });
       } catch (err) {
         console.error('Form submission error:', err);
+        
+        // Handle API error response if needed
+        if (err.response && err.response.data && err.response.data.message) {
+          if (err.response.data.message.includes('already exists')) {
+            setErrors({ name: 'A column with this name already exists' });
+          } else {
+            setErrors({ name: err.response.data.message });
+          }
+        }
       } finally {
         setIsSubmitting(false);
       }
@@ -57,10 +66,8 @@ const ColumnForm = ({ onSubmit, initialValues = { name: '' } }) => {
   };
 
   const handleSuggestionClick = (suggestion) => {
-    setFormData(prev => ({ ...prev, name: suggestion }));
-    if (errors.name) {
-      setErrors(prev => ({ ...prev, name: null }));
-    }
+    setName(suggestion);
+    if (errors.name) setErrors({...errors, name: null});
   };
 
   return (
@@ -71,8 +78,11 @@ const ColumnForm = ({ onSubmit, initialValues = { name: '' } }) => {
           type="text"
           id="name"
           name="name"
-          value={formData.name}
-          onChange={handleChange}
+          value={name}
+          onChange={(e) => {
+            setName(e.target.value);
+            if (errors.name) setErrors({...errors, name: null});
+          }}
           placeholder="e.g. To Do, In Progress, Done"
           className={errors.name ? 'error' : ''}
           disabled={isSubmitting}

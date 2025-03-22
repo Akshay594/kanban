@@ -60,18 +60,37 @@ const Modal = ({ title, children, onClose }) => {
     }
   };
 
+  // Prevent clicks inside modal from bubbling up to the overlay
+  const handleModalClick = (e) => {
+    e.stopPropagation();
+  };
+
   return (
     <div className="modal-overlay" onClick={handleOverlayClick}>
-      <div className="modal" ref={modalRef} role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div 
+        className="modal" 
+        ref={modalRef} 
+        role="dialog" 
+        aria-modal="true" 
+        aria-labelledby="modal-title"
+        onClick={handleModalClick}
+      >
         <div className="modal-header">
           <h2 id="modal-title">{title}</h2>
-          <button className="close-btn" onClick={onClose} aria-label="Close modal">
+          <button 
+            className="close-btn" 
+            onClick={(e) => {
+              e.stopPropagation();
+              onClose();
+            }} 
+            aria-label="Close modal"
+          >
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M13 1L1 13M1 1L13 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
             </svg>
           </button>
         </div>
-        <div className="modal-content">
+        <div className="modal-content" onClick={(e) => e.stopPropagation()}>
           {children}
         </div>
       </div>

@@ -1,0 +1,71 @@
+/* ./frontend/src/styles/AppMainContent.css */
+
+.app-main-content {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--bg-dark);
+    color: var(--text-light);
+  }
+  
+  .welcome-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    max-width: 500px;
+    padding: 2rem;
+  }
+  
+  .welcome-icon {
+    margin-bottom: 2rem;
+    animation: pulse 3s infinite;
+  }
+  
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+  }
+  
+  .welcome-container h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+  
+  .welcome-container p {
+    color: var(--text-light-secondary);
+    margin-bottom: 2rem;
+  }
+  
+  .create-board-btn {
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .create-board-btn:hover {
+    background-color: var(--primary-hover);
+    transform: translateY(-2px);
+  }
+  
+  .create-board-btn:active {
+    transform: translateY(0);
+  }
+  
+  @media (max-width: 768px) {
+    .welcome-container {
+      padding: 1rem;
+    }
+    
+    .welcome-container h2 {
+      font-size: 1.5rem;
+    }
+  }

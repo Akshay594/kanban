@@ -53,6 +53,24 @@ exports.createColumn = async (req, res) => {
       });
     }
     
+    // Check for duplicate column name (case insensitive)
+    const existingColumn = await prisma.column.findFirst({
+      where: {
+        name: {
+          equals: name,
+          mode: 'insensitive' // Case-insensitive comparison
+        },
+        boardId
+      }
+    });
+    
+    if (existingColumn) {
+      return res.status(400).json({
+        success: false,
+        message: 'A column with this name already exists on this board'
+      });
+    }
+    
     const column = await prisma.column.create({
       data: {
         name,
@@ -79,6 +97,37 @@ exports.updateColumn = async (req, res) => {
   try {
     const { id } = req.params;
     const { name } = req.body;
+    
+    // Get current column to find its board
+    const currentColumn = await prisma.column.findUnique({
+      where: { id }
+    });
+    
+    if (!currentColumn) {
+      return res.status(404).json({
+        success: false,
+        message: 'Column not found'
+      });
+    }
+    
+    // Check for duplicate column name on the same board (case insensitive)
+    const existingColumn = await prisma.column.findFirst({
+      where: {
+        name: {
+          equals: name,
+          mode: 'insensitive' // Case-insensitive comparison
+        },
+        boardId: currentColumn.boardId,
+        id: { not: id } // Exclude the current column
+      }
+    });
+    
+    if (existingColumn) {
+      return res.status(400).json({
+        success: false,
+        message: 'A column with this name already exists on this board'
+      });
+    }
     
     const column = await prisma.column.update({
       where: { id },
