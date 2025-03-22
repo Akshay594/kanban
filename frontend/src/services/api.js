@@ -2,10 +2,12 @@
 
 import axios from 'axios';
 
-// Get API URL based on environment
-const API_URL = import.meta.env.PROD 
-  ? 'https://kanban-backend-api.onrender.com/api'  // Production URL (change this)
-  : 'http://localhost:5000/api';                   // Development URL
+// // Get API URL based on environment
+// const API_URL = import.meta.env.PROD 
+//   ? 'https://kanban-backend-w3l5.onrender.com/api'  // Production URL (change this)
+//   : 'http://localhost:5000/api';                   // Development URL
+
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 // Create axios instance with base URL
 const api = axios.create({

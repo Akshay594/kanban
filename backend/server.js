@@ -11,16 +11,12 @@ require('dotenv').config();
 const app = express();
 const prisma = new PrismaClient();
 
-// CORS configuration - allow specific origins in production
-const corsOptions = {
-  origin: process.env.NODE_ENV === 'production' 
-    ? ['https://kanban-task-app.netlify.app'] // Replace with your frontend URL
-    : 'http://localhost:3000',
-  optionsSuccessStatus: 200
-};
 
 // Middleware
-app.use(cors(corsOptions));
+app.use(cors({
+  origin: process.env.CORS_ORIGIN || 'http://localhost:3000'
+}));
+
 app.use(helmet());
 app.use(morgan(process.env.NODE_ENV === 'production' ? 'combined' : 'dev'));
 app.use(express.json());
