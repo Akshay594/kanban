@@ -13,7 +13,7 @@ const prisma = new PrismaClient();
 
 
 app.use(cors({
-  origin: ['https://kanban-nj1wlg4nz-gopal-s-projects-eac2c47f.vercel.app', 'http://localhost:3000'],
+  origin: ['https://kanban-nj1wlg4nz-gopal-s-projects-eac2c47f.vercel.app', 'http://localhost:3000', 'https://kanban-seven-psi.vercel.app'],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   credentials: true
 }));
