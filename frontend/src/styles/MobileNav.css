@@ -1,0 +1,125 @@
+/* ./frontend/src/styles/MobileNav.css */
+
+.mobile-nav {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 40;
+    padding: var(--space-3);
+    background: linear-gradient(to top, var(--bg-dark), transparent);
+  }
+  
+  .mobile-nav-toggle {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    background-color: var(--primary);
+    color: white;
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-lg);
+    font-weight: 600;
+    box-shadow: var(--shadow-lg);
+    transition: all var(--transition-fast);
+  }
+  
+  .mobile-nav-toggle:hover {
+    background-color: var(--primary-hover);
+    transform: translateY(-2px);
+  }
+  
+  .mobile-nav-toggle svg {
+    flex-shrink: 0;
+  }
+  
+  .mobile-nav-drawer {
+    position: absolute;
+    bottom: calc(100% + var(--space-3));
+    left: var(--space-3);
+    right: var(--space-3);
+    background-color: var(--bg-dark-secondary);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-xl);
+    max-height: 300px;
+    overflow-y: auto;
+    animation: slideUpDrawer 0.3s forwards;
+  }
+  
+  @keyframes slideUpDrawer {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .mobile-nav-header {
+    padding: var(--space-4);
+    border-bottom: 1px solid var(--border);
+  }
+  
+  .mobile-nav-header h3 {
+    color: var(--text-light-secondary);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+  
+  .mobile-nav-boards {
+    padding: var(--space-3);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+  
+  .mobile-nav-board {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-4);
+    color: var(--text-light-secondary);
+    border-radius: var(--radius-md);
+    font-weight: 500;
+    transition: all var(--transition-fast);
+  }
+  
+  .mobile-nav-board.active {
+    background-color: var(--primary);
+    color: white;
+  }
+  
+  .mobile-nav-board:not(.active):hover {
+    background-color: var(--bg-dark-tertiary);
+    color: var(--text-light);
+  }
+  
+  .mobile-nav-board svg {
+    flex-shrink: 0;
+  }
+  
+  .mobile-nav-board.create {
+    color: var(--primary);
+    margin-top: var(--space-2);
+  }
+  
+  .mobile-nav-board.create:hover {
+    background-color: rgba(99, 102, 241, 0.1);
+  }
+  
+  /* Only display mobile nav on smaller screens */
+  @media (max-width: 768px) {
+    .mobile-nav {
+      display: block;
+    }
+    
+    /* Add padding to main container to avoid overlap with mobile nav */
+    .main-container {
+      padding-bottom: 80px;
+    }
+  }

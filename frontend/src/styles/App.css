@@ -1,0 +1,305 @@
+/* ./frontend/src/styles/App.css */
+
+:root {
+  /* Core colors */
+  --primary: #6366f1;
+  --primary-hover: #818cf8;
+  --primary-light: #c7d2fe;
+  --primary-dark: #4f46e5;
+  
+  /* Dark theme colors */
+  --bg-dark: #111827;
+  --bg-dark-secondary: #1f2937;
+  --bg-dark-tertiary: #374151;
+  
+  /* Text colors */
+  --text-light: #f9fafb;
+  --text-light-secondary: #e5e7eb;
+  --text-dark: #1f2937;
+  
+  /* Status colors */
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --danger-hover: #f87171;
+  
+  /* UI colors */
+  --border: rgba(107, 114, 128, 0.3);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  
+  /* Spacing */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  
+  /* Border radius */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
+  --radius-2xl: 1rem;
+  --radius-full: 9999px;
+  
+  /* Transitions */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--text-light);
+  background-color: var(--bg-dark);
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  font-family: inherit;
+  font-weight: 600;
+  transition: all var(--transition-fast);
+}
+
+button:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+input, textarea, select {
+  font-family: inherit;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.main-container {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.empty-board {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  color: var(--text-light-secondary);
+  padding: var(--space-8);
+  text-align: center;
+  background-color: var(--bg-dark);
+}
+
+.empty-board svg {
+  margin-bottom: var(--space-6);
+  opacity: 0.6;
+}
+
+.empty-board h2 {
+  font-size: 1.5rem;
+  margin-bottom: var(--space-4);
+  color: var(--text-light);
+}
+
+.empty-board p {
+  max-width: 30rem;
+  margin-bottom: var(--space-6);
+}
+
+.empty-board button {
+  padding: var(--space-3) var(--space-6);
+  background-color: var(--primary);
+  color: var(--text-light);
+  border-radius: var(--radius-md);
+  font-weight: 600;
+}
+
+.empty-board button:hover {
+  background-color: var(--primary-hover);
+}
+
+/* Loading state styles */
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  color: var(--text-light);
+  font-size: 1.125rem;
+  background-color: var(--bg-dark);
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  border-top-color: var(--primary);
+  animation: spin 1s linear infinite;
+  margin-right: var(--space-4);
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Delete confirmation styles */
+.delete-confirmation {
+  padding: var(--space-4) 0;
+}
+
+.delete-confirmation p {
+  margin-bottom: var(--space-6);
+  color: var(--text-light-secondary);
+  line-height: 1.6;
+}
+
+.delete-actions {
+  display: flex;
+  gap: var(--space-4);
+}
+
+.delete-actions button {
+  flex: 1;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  transition: all var(--transition-fast);
+}
+
+.cancel-btn {
+  background-color: var(--bg-dark-tertiary);
+  color: var(--text-light);
+}
+
+.cancel-btn:hover {
+  background-color: var(--bg-dark-secondary);
+}
+
+.delete-btn {
+  background-color: var(--danger);
+  color: var(--text-light);
+}
+
+.delete-btn:hover {
+  background-color: var(--danger-hover);
+}
+
+/* Common button styles */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-2) var(--space-4);
+  font-size: 0.875rem;
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+}
+
+.btn-primary {
+  background-color: var(--primary);
+  color: var(--text-light);
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-hover);
+}
+
+.btn-secondary {
+  background-color: var(--bg-dark-tertiary);
+  color: var(--text-light);
+}
+
+.btn-secondary:hover {
+  background-color: var(--bg-dark-secondary);
+}
+
+.btn-danger {
+  background-color: var(--danger);
+  color: var(--text-light);
+}
+
+.btn-danger:hover {
+  background-color: var(--danger-hover);
+}
+
+.btn-sm {
+  padding: var(--space-1) var(--space-3);
+  font-size: 0.75rem;
+}
+
+.btn-lg {
+  padding: var(--space-3) var(--space-6);
+  font-size: 1rem;
+}
+
+.btn svg {
+  margin-right: var(--space-2);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideInUp {
+  from { 
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to { 
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+.fade-in {
+  animation: fadeIn var(--transition-normal) forwards;
+}
+
+.slide-in-up {
+  animation: slideInUp var(--transition-normal) forwards;
+}
+
+/* For screens smaller than 768px */
+@media (max-width: 768px) {
+  .delete-actions {
+    flex-direction: column;
+  }
+}

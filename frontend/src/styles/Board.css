@@ -1,0 +1,231 @@
+/* ./frontend/src/styles/Board.css */
+
+.board {
+  flex: 1;
+  background-color: var(--bg-dark);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  animation: fadeIn var(--transition-normal);
+}
+
+.board-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-6);
+  border-bottom: 1px solid var(--border);
+}
+
+.board-meta {
+  display: flex;
+  flex-direction: column;
+}
+
+.board-meta h2 {
+  color: var(--text-light);
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: var(--space-1);
+}
+
+.task-count {
+  color: var(--text-light-secondary);
+  font-size: 0.875rem;
+}
+
+.board-actions {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.edit-board-btn,
+.delete-board-btn {
+  display: flex;
+  align-items: center;
+  font-size: 0.875rem;
+  padding: var(--space-2) var(--space-4);
+}
+
+.edit-board-btn svg,
+.delete-board-btn svg {
+  margin-right: var(--space-2);
+}
+
+.columns-container {
+  flex: 1;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: var(--space-6);
+  scrollbar-width: thin;
+  scrollbar-color: var(--bg-dark-tertiary) transparent;
+}
+
+.columns-container::-webkit-scrollbar {
+  height: 8px;
+}
+
+.columns-container::-webkit-scrollbar-thumb {
+  background-color: var(--bg-dark-tertiary);
+  border-radius: var(--radius-full);
+}
+
+.columns-container::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+.columns-wrapper {
+  display: flex;
+  gap: var(--space-6);
+  height: 100%;
+  min-height: 200px;
+}
+
+.add-column-wrapper {
+  min-width: 280px;
+  height: 100%;
+  display: flex;
+  align-items: flex-start;
+}
+
+.add-column {
+  margin-top: 36px; /* Align with top of task columns */
+  min-width: 280px;
+  height: 300px;
+  background-color: var(--bg-dark-secondary);
+  background-image: linear-gradient(to bottom, rgba(99, 102, 241, 0.05), rgba(99, 102, 241, 0.02));
+  border: 2px dashed var(--border);
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.add-column:hover {
+  border-color: var(--primary-light);
+  background-image: linear-gradient(to bottom, rgba(99, 102, 241, 0.1), rgba(99, 102, 241, 0.05));
+  transform: translateY(-2px);
+}
+
+.add-column-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: var(--text-light-secondary);
+}
+
+.add-column-content svg {
+  margin-bottom: var(--space-3);
+  color: var(--primary);
+}
+
+.add-column-content span {
+  font-weight: 600;
+}
+
+.add-column:hover .add-column-content {
+  color: var(--primary);
+}
+
+/* Board animation */
+@keyframes boardAppear {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Empty board state */
+.empty-board {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: var(--space-8);
+  height: 100%;
+  background-color: var(--bg-dark);
+}
+
+.empty-board svg {
+  margin-bottom: var(--space-6);
+  opacity: 0.7;
+}
+
+.empty-board h2 {
+  color: var(--text-light);
+  font-size: 1.5rem;
+  margin-bottom: var(--space-3);
+}
+
+.empty-board p {
+  color: var(--text-light-secondary);
+  max-width: 400px;
+  margin-bottom: var(--space-6);
+}
+
+/* Loading state */
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--text-light-secondary);
+}
+
+.loading-spinner {
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+  margin-right: var(--space-4);
+  border: 3px solid rgba(99, 102, 241, 0.3);
+  border-radius: 50%;
+  border-top-color: var(--primary);
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .board-header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: var(--space-4);
+  }
+  
+  .board-actions {
+    margin-top: var(--space-4);
+    width: 100%;
+  }
+
+  .board-actions button {
+    flex: 1;
+  }
+  
+  .board-actions button span {
+    display: none;
+  }
+  
+  .board-actions button svg {
+    margin-right: 0;
+  }
+  
+  .columns-container {
+    padding: var(--space-4);
+  }
+  
+  .add-column {
+    min-width: 220px;
+  }
+}
